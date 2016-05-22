@@ -1,0 +1,219 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package UserInterface.PoliceOfficerRole;
+
+import Business.CrimeSystem;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.Organization.PoliceOrganization;
+import CrimeAnalytics.Analytics;
+import CrimeAnalytics.CrimeAnalytics;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Font;
+import javax.swing.JPanel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
+/**
+ *
+ * @author Lakshmi
+ */
+public class AnalyticsJPanel extends javax.swing.JPanel {
+    private JPanel userProcessContainer;
+    private Enterprise enterprise;
+    private Organization organization;
+    private CrimeSystem system;
+    /**
+     * Creates new form AnalyticsJPanel
+     */
+    public AnalyticsJPanel(JPanel userProcessContainer, Enterprise enterprise, Organization organization, CrimeSystem system) {
+        initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.system = system;
+        displayChart();
+    }
+
+    private void displayChart(){
+        //DefaultPieDataset dataset = new DefaultPieDataset();
+        for(Organization org: enterprise.getOrganizationDirectory().getOrganizationList()){
+            if(org instanceof PoliceOrganization){
+                if(org.getName().equals(organization.getName())){
+                    calculateChartData(org);
+                }                
+            }                
+            
+        }
+    }
+    
+    private void createChart(PieDataset dataset){
+        JFreeChart chart = ChartFactory.createPieChart(
+            "Pie Chart - Category Wise Crime for Tremont",  // chart title
+            dataset,             // data
+            true,               // include legend
+            true,
+            false
+        );
+
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+        plot.setNoDataMessage("No data available");
+        plot.setCircular(false);
+        plot.setLabelGap(0.02);
+        ChartPanel chart1=new ChartPanel(chart);
+        chartPanel.removeAll();
+        chartPanel.add(chart1,BorderLayout.CENTER);
+        chartPanel.validate();       
+        
+    }
+    
+    private void calculateChartData(Organization o){
+        int noOfBurglary =0 ;
+        int noOfKidnappingCrimes = 0;
+        int noOfSexualCrimes =0;
+        int noOfAccidents = 0;
+        int noOfChildCrimes = 0;
+        int noOfForgery = 0;
+        int noOfmurderCrimes = 0;
+        int totalCrimes = 0;
+        for(Analytics a: o.getAnalytics().getAnalyticList()){
+            if(a.getCrimeType().equals("BURGLARY")){
+                noOfBurglary = noOfBurglary+1;                
+            }
+            else if(a.getCrimeType().equals("KIDNAPPING"))
+            {
+                noOfKidnappingCrimes = noOfKidnappingCrimes+1;
+            }
+            else if(a.getCrimeType().equals("SEXUAL ASSAULT"))
+            {
+                noOfSexualCrimes = noOfSexualCrimes+1;
+            }
+            else if(a.getCrimeType().equals("ACCIDENT"))
+            {
+                noOfAccidents = noOfAccidents+1;
+            }
+            else if(a.getCrimeType().equals("CHILD ABUSE"))
+            {
+                noOfChildCrimes = noOfChildCrimes+1;
+            }
+            else if(a.getCrimeType().equals("FORGERY"))
+            {
+                noOfForgery = noOfForgery+1;
+            }
+            else if(a.getCrimeType().equals("MURDER"))
+            {
+                noOfmurderCrimes = noOfmurderCrimes+1;
+            }
+        }
+        totalCrimes = noOfAccidents+noOfChildCrimes+noOfForgery+noOfKidnappingCrimes+noOfSexualCrimes+noOfBurglary+noOfmurderCrimes;
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("BURGLARY", ((noOfBurglary/totalCrimes)*100));
+        dataset.setValue("KIDNAPPING", ((noOfKidnappingCrimes/totalCrimes)*100));
+        dataset.setValue("SEXUAL ASSAULT", ((noOfSexualCrimes/totalCrimes)*100));
+        dataset.setValue("ACCIDENT", ((noOfAccidents/totalCrimes)*100));
+        dataset.setValue("CHILD ABUSE", ((noOfChildCrimes/totalCrimes)*100));
+        dataset.setValue("FORGERY", ((noOfForgery/totalCrimes)*100));
+        dataset.setValue("MURDER", ((noOfmurderCrimes/totalCrimes)*100));
+        createChart(dataset);
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        chartPanel = new javax.swing.JPanel();
+        btnBack = new javax.swing.JButton();
+
+        setBackground(new java.awt.Color(153, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Leelawadee", 1, 18)); // NOI18N
+        jLabel1.setText("Reporting");
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        chartPanel.setLayout(new java.awt.BorderLayout());
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(56, Short.MAX_VALUE)
+                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+
+        btnBack.setText("<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(397, 397, 397)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(163, 163, 163)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnBack)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(219, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(7, 7, 7)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48)
+                .addComponent(btnBack)
+                .addContainerGap(155, Short.MAX_VALUE))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        userProcessContainer.remove(this);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
+    private javax.swing.JPanel chartPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    // End of variables declaration//GEN-END:variables
+}
